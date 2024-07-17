@@ -1,0 +1,9 @@
+# ninja log v6
+5	131	7429138585377752	CMakeFiles/calendar_app.dir/main.c.obj	4dd8765bf8235565
+138	280	7429279099998607	calendar_app.exe	780aa7378087aa73
+4	141	7429251282244775	CMakeFiles/calendar_app.dir/src/option_handlers.c.obj	c8c94baa80cbd61
+21	162	7429247990778540	CMakeFiles/calendar_app.dir/src/utils.c.obj	3925068f6acceb9a
+4	138	7429279098657936	CMakeFiles/calendar_app.dir/src/main.c.obj	5e2f381d2d57da8
+27	156	7429247990843621	CMakeFiles/calendar_app.dir/src/notes.c.obj	af73a304c421801d
+4	137	7429280937719447	CMakeFiles/calendar_app.dir/src/main.c.obj	5e2f381d2d57da8
+4	108	7429281002393979	calendar_app.exe	780aa7378087aa73
