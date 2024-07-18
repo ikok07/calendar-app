@@ -7,7 +7,9 @@
 
 #include <stdlib.h>
 #include <time.h>
+#include <cjson/cJSON.h>
 
+#include "../include/http_handler.h"
 #include "../include/utils.h"
 #include "../include/notes.h"
 
@@ -115,4 +117,27 @@ void displayNotesForDate(const Date date) {
     } else printf("----------- There are no notes available for the selected date! -----------");
 
     free(notes);
+}
+
+void displayLiveDate() {
+    cJSON *json = cJSON_CreateObject();
+    cJSON_AddNumberToObject(json, "id", 1);
+    cJSON_AddStringToObject(json, "name", "John Smith");
+
+    char *json_str = cJSON_Print(json);
+
+    char *response = malloc(1);
+    if (make_request("https://jsonplaceholder.typicode.com/posts/1", PUT, json_str, &response) != 0) {
+        perror("Failed to fetch live date!");
+        return;
+    }
+    cJSON *json_response = cJSON_Parse(response);
+    if (json == NULL) {
+        perror("Failed to parse response JSON!");
+        return;
+    }
+    cJSON *id = cJSON_GetObjectItemCaseSensitive(json_response, "id");
+    cJSON *name = cJSON_GetObjectItemCaseSensitive(json_response, "name");
+    printf("%d\n", id->valueint);
+    printf("%s\n", name->valuestring);
 }
