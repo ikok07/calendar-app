@@ -13,7 +13,7 @@ void askUserForOption(int *option) {
     printf("2. Display all the days of the current month\n");
     printf("3. Add note\n");
     printf("4. Display note\n");
-    printf("5. Fetch live date\n");
+    printf("5. Fetch live date for coordinates\n");
     printf("6. Exit\n");
     scanf_s("%d", option, sizeof(int));
 }
@@ -40,7 +40,13 @@ void executeCommand(const int option) {
             displayNotesForDate(date);
             break;
         case 5:
-            displayLiveDate();
+            double lat;
+            double lng;
+            printf("Latitude: \n");
+            scanf("%lf", &lat);
+            printf("Longitude: \n");
+            scanf("%lf", &lng);
+            displayLiveDateForCoordinates(lat, lng);
             break;
         case 6:
             exit(0);
@@ -53,6 +59,7 @@ void executeCommand(const int option) {
 FILE *log_file;
 
 int main(const int argc, const char **argv) {
+    loadEnvFile();
     int option = 0;
     bool loggingEnabled = false;
     printf("The Callendar App!\n");

@@ -14,6 +14,16 @@ typedef struct {
     size_t size;
 } MemoryStruct;
 
-int make_request(char *url, rtype_t type, char *body, char **response);
+typedef struct {
+    char *key;
+    char *value;
+} rheader_t;
+
+typedef struct {
+    char *key;
+    char *value;
+} rquery_t;
+
+int make_request(char *url, rtype_t type, char *body, rheader_t *headerFields, size_t hnum, rquery_t *queries, size_t qnum, char **response);
 
 #endif //HTTP_HANDLER_H

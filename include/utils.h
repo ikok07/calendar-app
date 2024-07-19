@@ -20,5 +20,6 @@ bool yearIsLeap(int year);
 int daysInMonth(int month, int year);
 char *monthName(int month);
 int datecmp(Date d1, Date d2);
+void loadEnvFile();
 
 #endif //UTILS_H

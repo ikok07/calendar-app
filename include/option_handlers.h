@@ -10,6 +10,6 @@ void displayCurrentDay();
 void displayAllDaysOfMonth();
 void addNote();
 void displayNotesForDate(Date date);
-void displayLiveDate();
+void displayLiveDateForCoordinates(int lat, int lng);
 
 #endif //OPTION_HANDLERS_H

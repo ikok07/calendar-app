@@ -6,6 +6,7 @@
 #include "../include/option_handlers.h"
 
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 #include <cjson/cJSON.h>
 
@@ -119,25 +120,35 @@ void displayNotesForDate(const Date date) {
     free(notes);
 }
 
-void displayLiveDate() {
-    cJSON *json = cJSON_CreateObject();
-    cJSON_AddNumberToObject(json, "id", 1);
-    cJSON_AddStringToObject(json, "name", "John Smith");
+void displayLiveDateForCoordinates(int lat, int lng) {
+    char *latStr = malloc(sizeof(int));
+    char *lngStr = malloc(sizeof(int));
+    itoa(lat, latStr, 10);
+    itoa(lng, lngStr, 10);
 
-    char *json_str = cJSON_Print(json);
+    rquery_t queries[2] = {{"latitude", latStr}, {"longitude", lngStr}};
 
     char *response = malloc(1);
-    if (make_request("https://jsonplaceholder.typicode.com/posts/1", PUT, json_str, &response) != 0) {
-        perror("Failed to fetch live date!");
-        return;
-    }
+    if (make_request(
+        "https://timeapi.io/api/Time/current/coordinate",
+        GET,
+        NULL,
+        NULL,
+        0,
+        queries,
+        2,
+        &response) != 0) return;
     cJSON *json_response = cJSON_Parse(response);
-    if (json == NULL) {
+    if (json_response == NULL) {
         perror("Failed to parse response JSON!");
         return;
     }
-    cJSON *id = cJSON_GetObjectItemCaseSensitive(json_response, "id");
-    cJSON *name = cJSON_GetObjectItemCaseSensitive(json_response, "name");
-    printf("%d\n", id->valueint);
-    printf("%s\n", name->valuestring);
+    cJSON *dateTime = cJSON_GetObjectItemCaseSensitive(json_response, "dateTime");
+    cJSON *timeZone = cJSON_GetObjectItemCaseSensitive(json_response, "timeZone");
+    if (timeZone != NULL && timeZone->valuestring != NULL) {
+        printf("----------- DATE IN %s -----------\n", timeZone->valuestring);
+    }
+    if (dateTime != NULL && dateTime->valuestring != NULL) {
+        printf("Date: %s\n", dateTime->valuestring);
+    }
 }

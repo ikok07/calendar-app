@@ -13,7 +13,8 @@ add_executable(calendar_app src/main.c
         src/background_log.c
         include/background_log.h
         src/http_handler.c
-        include/http_handler.h)
+        include/http_handler.h
+)
 
 find_package(CURL REQUIRED)
 target_link_libraries(calendar_app PRIVATE CURL::libcurl)
