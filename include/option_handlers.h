@@ -11,5 +11,6 @@ void displayAllDaysOfMonth();
 void addNote();
 void displayNotesForDate(Date date);
 void displayLiveDateForCoordinates(int lat, int lng);
+void displayFullDatesFromTimestamps(int num_days, ...);
 
 #endif //OPTION_HANDLERS_H

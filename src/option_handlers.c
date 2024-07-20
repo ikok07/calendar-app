@@ -7,6 +7,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 #include <time.h>
 #include <cjson/cJSON.h>
 
@@ -39,8 +40,8 @@ void addNote() {
 
     FILE *fp = fopen("../docs/notes.bin", "rb");
     FILE *fpTemp = fopen("../docs/temp.bin", "wb");
-    if (!fpTemp) {
-        printf("Failed to open file!");
+    if (fpTemp == NULL) {
+        log_error();
         exit(1);
     }
 
@@ -53,8 +54,8 @@ void addNote() {
         while (fread(&currNote, sizeof(Note), 1, fp)) {
             notesCount++;
             Note *tempArr = realloc(notesArr, sizeof(Note) * notesCount);
-            if (!tempArr) {
-                printf("Memory reallocation failed!\n");
+            if (tempArr == NULL) {
+                log_error();
                 free(notesArr);
                 fclose(fp);
                 fclose(fpTemp);
@@ -74,12 +75,12 @@ void addNote() {
     fclose(fpTemp);
 
     if (fp && remove("../docs/notes.bin") != 0) {
-        perror("An error occurred! Please try again! REMOVE_FAILED");
+        log_error();
         exit(1);
     }
 
     if (rename("../docs/temp.bin", "../docs/notes.bin") != 0) {
-        perror("An error occurred! Please try again! RENAME_FAILED");
+        log_error();
         exit(1);
     }
 }
@@ -87,7 +88,7 @@ void addNote() {
 void displayNotesForDate(const Date date) {
     FILE *fp = fopen("../docs/notes.bin", "rb");
     if (!fp) {
-        perror("An error occurred. Please try again! FILE_NOT_FOUND");
+        log_error();
         exit(1);
     }
 
@@ -98,8 +99,8 @@ void displayNotesForDate(const Date date) {
     while (fread(&currNote, sizeof(Note), 1, fp)) {
         if (datecmp(date, currNote.date) == 0) {
             Note *tempArr = realloc(notes, sizeof(Note) * ++notesCount);
-            if (!tempArr) {
-                perror("Failed to allocate memory!");
+            if (tempArr == NULL) {
+                log_error();
                 free(notes);
                 fclose(fp);
                 exit(1);
@@ -150,5 +151,15 @@ void displayLiveDateForCoordinates(int lat, int lng) {
     }
     if (dateTime != NULL && dateTime->valuestring != NULL) {
         printf("Date: %s\n", dateTime->valuestring);
+    }
+}
+
+void displayFullDatesFromTimestamps(const int num_days, ...) {
+    va_list args;
+    va_start(args, num_days);
+    for (int i = 0; i < num_days; i++) {
+        time_t sel_timestamp = va_arg(args, time_t);
+        struct tm *date = localtime(&sel_timestamp);
+        printf("----------- %s %d %d -----------\n", monthName(date->tm_mon), date->tm_mday, 1900 + date->tm_year);
     }
 }

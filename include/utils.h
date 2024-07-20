@@ -6,6 +6,8 @@
 #define UTILS_H
 #include <stdbool.h>
 
+#define single_day_secs 60 * 60 * 24
+
 typedef struct date {
     int day;
     int month;
@@ -21,5 +23,6 @@ int daysInMonth(int month, int year);
 char *monthName(int month);
 int datecmp(Date d1, Date d2);
 void loadEnvFile();
+void log_error();
 
 #endif //UTILS_H

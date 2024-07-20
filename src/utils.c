@@ -126,14 +126,18 @@ void loadEnvFile() {
     }
 
     int curr_line_size = 0;
-    char *curr_line = malloc(sizeof(char) * curr_line_size);
+    char *curr_line = malloc(curr_line_size);
     char curr_char;
     while ((curr_char = fgetc(fp)) != EOF) {
         if (curr_char == '\n') {
             curr_line[curr_line_size] = '\0';
+            if (curr_line[0] == '#') {
+                curr_line_size = 0;
+                curr_line = malloc(curr_line_size);
+            }
             putenv(curr_line);
             curr_line_size = 0;
-            curr_line = malloc(sizeof(char) * curr_line_size);
+            curr_line = malloc(curr_line_size);
             continue;
         }
         char *temp_ptr = realloc(curr_line, ++curr_line_size);
@@ -151,4 +155,8 @@ void loadEnvFile() {
     }
 
     fclose(fp);
+}
+
+void log_error() {
+    fprintf(stderr, "Error: %s\n", strerror(errno));
 }

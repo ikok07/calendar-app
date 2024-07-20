@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "../include/background_log.h"
 #include "../include/option_handlers.h"
@@ -14,7 +15,8 @@ void askUserForOption(int *option) {
     printf("3. Add note\n");
     printf("4. Display note\n");
     printf("5. Fetch live date for coordinates\n");
-    printf("6. Exit\n");
+    printf("6. Convert timestamp and 2 days backwards to date strings\n");
+    printf("7. Exit\n");
     scanf_s("%d", option, sizeof(int));
 }
 
@@ -42,13 +44,24 @@ void executeCommand(const int option) {
         case 5:
             double lat;
             double lng;
-            printf("Latitude: \n");
+            printf("Latitude:\n");
             scanf("%lf", &lat);
-            printf("Longitude: \n");
+            printf("Longitude:\n");
             scanf("%lf", &lng);
             displayLiveDateForCoordinates(lat, lng);
             break;
         case 6:
+            time_t curr_timestamp = 0;
+            printf("Enter timestamp:\n");
+            scanf("%lu", &curr_timestamp);
+
+            displayFullDatesFromTimestamps(
+                3,
+                curr_timestamp,
+                curr_timestamp - single_day_secs,
+                curr_timestamp - 2 * single_day_secs);
+            break;
+        case 7:
             exit(0);
         default:
             printf("Invalid option selected. Please try again!\n");
